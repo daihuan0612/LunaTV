@@ -198,21 +198,23 @@ export const UserMenu: React.FC = () => {
     }
   }, []);
 
-  // 版本检查
-  useEffect(() => {
-    const checkUpdate = async () => {
-      try {
-        const status = await checkForUpdates();
-        setUpdateStatus(status);
-      } catch (error) {
-        console.warn('版本检查失败:', error);
-      } finally {
-        setIsChecking(false);
-      }
-    };
+ // 版本检查 - 已禁用
+/*
+useEffect(() => {
+  const checkUpdate = async () => {
+    try {
+      const status = await checkForUpdates();
+      setUpdateStatus(status);
+    } catch (error) {
+      console.warn('版本检查失败:', error);
+    } finally {
+      setIsChecking(false);
+    }
+  };
 
-    checkUpdate();
-  }, []);
+  checkUpdate();
+}, []);
+*/
 
   // 点击外部区域关闭下拉框
   useEffect(() => {
