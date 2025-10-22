@@ -11,7 +11,7 @@ import { checkForUpdates, UpdateStatus } from '@/lib/version_check';
 
 import { useSite } from '@/components/SiteProvider';
 import { ThemeToggle } from '@/components/ThemeToggle';
-
+{/*
 // 版本显示组件
 function VersionDisplay() {
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus | null>(null);
@@ -66,7 +66,7 @@ function VersionDisplay() {
     </button>
   );
 }
-
+*/}
 function LoginPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -181,7 +181,7 @@ function LoginPageClient() {
       </div>
 
       {/* 版本信息显示 */}
-      <VersionDisplay />
+      {/* <VersionDisplay /> */}
     </div>
   );
 }
