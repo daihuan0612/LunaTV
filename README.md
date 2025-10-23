@@ -1,10 +1,10 @@
-# MoonTV
+# LunaTV
 
 <div align="center">
-  <img src="public/logo.png" alt="MoonTV Logo" width="120">
+  <img src="public/logo.png" alt="LunaTV Logo" width="120">
 </div>
 
-> 🎬 **MoonTV** 是一个开箱即用的、跨平台的影视聚合播放器。它基于 **Next.js 14** + **Tailwind&nbsp;CSS** + **TypeScript** 构建，支持多资源搜索、在线播放、收藏同步、播放记录、云端存储，让你可以随时随地畅享海量免费影视内容。
+> 🎬 **LunaTV** 是一个开箱即用的、跨平台的影视聚合播放器。它基于 **Next.js 14** + **Tailwind&nbsp;CSS** + **TypeScript** 构建，支持多资源搜索、在线播放、收藏同步、播放记录、云端存储，让你可以随时随地畅享海量免费影视内容。
 
 <div align="center">
 
@@ -89,9 +89,9 @@
 
 ```yml
 services:
-  moontv-core:
-    image: ghcr.io/moontechlab/lunatv:latest
-    container_name: moontv-core
+  Lunatv-core:
+    image: ghcr.io/Lunatechlab/lunatv:latest
+    container_name: Lunatv-core
     restart: on-failure
     ports:
       - '3000:3000'
@@ -99,21 +99,21 @@ services:
       - USERNAME=admin
       - PASSWORD=admin_password
       - NEXT_PUBLIC_STORAGE_TYPE=kvrocks
-      - KVROCKS_URL=redis://moontv-kvrocks:6666
+      - KVROCKS_URL=redis://Lunatv-kvrocks:6666
     networks:
-      - moontv-network
+      - Lunatv-network
     depends_on:
-      - moontv-kvrocks
-  moontv-kvrocks:
+      - Lunatv-kvrocks
+  Lunatv-kvrocks:
     image: apache/kvrocks
-    container_name: moontv-kvrocks
+    container_name: Lunatv-kvrocks
     restart: unless-stopped
     volumes:
       - kvrocks-data:/var/lib/kvrocks
     networks:
-      - moontv-network
+      - Lunatv-network
 networks:
-  moontv-network:
+  Lunatv-network:
     driver: bridge
 volumes:
   kvrocks-data:
@@ -123,9 +123,9 @@ volumes:
 
 ```yml
 services:
-  moontv-core:
-    image: ghcr.io/moontechlab/lunatv:latest
-    container_name: moontv-core
+  Lunatv-core:
+    image: ghcr.io/Lunatechlab/lunatv:latest
+    container_name: Lunatv-core
     restart: on-failure
     ports:
       - '3000:3000'
@@ -133,22 +133,22 @@ services:
       - USERNAME=admin
       - PASSWORD=admin_password
       - NEXT_PUBLIC_STORAGE_TYPE=redis
-      - REDIS_URL=redis://moontv-redis:6379
+      - REDIS_URL=redis://Lunatv-redis:6379
     networks:
-      - moontv-network
+      - Lunatv-network
     depends_on:
-      - moontv-redis
-  moontv-redis:
+      - Lunatv-redis
+  Lunatv-redis:
     image: redis:alpine
-    container_name: moontv-redis
+    container_name: Lunatv-redis
     restart: unless-stopped
     networks:
-      - moontv-network
+      - Lunatv-network
     # 请开启持久化，否则升级/重启后数据丢失
     volumes:
       - ./data:/data
 networks:
-  moontv-network:
+  Lunatv-network:
     driver: bridge
 ```
 
@@ -159,9 +159,9 @@ networks:
 3. 使用如下 docker compose
 ```yml
 services:
-  moontv-core:
-    image: ghcr.io/moontechlab/lunatv:latest
-    container_name: moontv-core
+  Lunatv-core:
+    image: ghcr.io/Lunatechlab/lunatv:latest
+    container_name: Lunatv-core
     restart: on-failure
     ports:
       - '3000:3000'
@@ -197,7 +197,7 @@ Zeabur 是一站式云端部署平台，使用预构建的 Docker 镜像可以�
 
 2. **添加 LunaTV 服务**
    - 点击 "Add Service" > "Docker Images"
-   - 输入镜像名称：`ghcr.io/moontechlab/lunatv:latest`
+   - 输入镜像名称：`ghcr.io/Lunatechlab/lunatv:latest`
    - 配置端口：`3000` (HTTP)
 
 3. **配置环境变量**
@@ -308,11 +308,11 @@ custom_category 支持的自定义分类已知如下：
 
 也可输入如 "哈利波特" 效果等同于豆瓣搜索
 
-MoonTV 支持标准的苹果 CMS V10 API 格式。
+LunaTV 支持标准的苹果 CMS V10 API 格式。
 
 ## 订阅
 
-将完整的配置文件 base58 编码后提供 http 服务即为订阅链接，可在 MoonTV 后台/Helios 中使用。
+将完整的配置文件 base58 编码后提供 http 服务即为订阅链接，可在 LunaTV 后台/Helios 中使用。
 
 ## 自动更新
 
@@ -327,7 +327,7 @@ dockge/komodo 等 docker compose UI 也有自动更新功能
 | USERNAME                            | 站长账号           | 任意字符串                       | 无默认，必填字段                                                                                                                     |
 | PASSWORD                            | 站长密码           | 任意字符串                       | 无默认，必填字段                                                                                                                     |
 | SITE_BASE                           | 站点 url              |       形如 https://example.com                  | 空                                                                                                                     |
-| NEXT_PUBLIC_SITE_NAME               | 站点名称                                     | 任意字符串                       | MoonTV                                                                                                                     |
+| NEXT_PUBLIC_SITE_NAME               | 站点名称                                     | 任意字符串                       | LunaTV                                                                                                                     |
 | ANNOUNCEMENT                        | 站点公告                                     | 任意字符串                       | 本网站仅提供影视信息搜索服务，所有内容均来自第三方网站。本站不存储任何视频资源，不对任何内容的准确性、合法性、完整性负责。 |
 | NEXT_PUBLIC_STORAGE_TYPE            | 播放记录/收藏的存储方式                      | redis、kvrocks、upstash | 无默认，必填字段                                                                                                               |
 | KVROCKS_URL                           | kvrocks 连接 url                               | 连接 url                         | 空                                                                                                                         |
@@ -361,7 +361,7 @@ NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE 选项解释：
 
 ## 客户端
 
-v100.0.0 以上版本可配合 [Selene](https://github.com/MoonTechLab/Selene) 使用，移动端体验更加友好，数据完全同步
+v100.0.0 以上版本可配合 [Selene](https://github.com/LunaTechLab/Selene) 使用，移动端体验更加友好，数据完全同步
 
 ## AndroidTV 使用
 
@@ -391,7 +391,7 @@ v100.0.0 以上版本可配合 [Selene](https://github.com/MoonTechLab/Selene) �
 
 ## License
 
-[MIT](LICENSE) © 2025 MoonTV & Contributors
+[MIT](LICENSE) © 2025 LunaTV & Contributors
 
 ## 致谢
 
@@ -405,4 +405,4 @@ v100.0.0 以上版本可配合 [Selene](https://github.com/MoonTechLab/Selene) �
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=MoonTechLab/LunaTV&type=Date)](https://www.star-history.com/#MoonTechLab/LunaTV&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=LunaTechLab/LunaTV&type=Date)](https://www.star-history.com/#LunaTechLab/LunaTV&Date)
