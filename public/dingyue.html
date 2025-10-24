@@ -1,37 +1,38 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>影视仓中转</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影视仓数据</title>
 </head>
 <body>
+
+<h2>影视仓数据 - dingyue.json</h2>
+
+<pre id="json-output">正在加载...</pre>
+
 <script>
-  // 使用 fetch 获取 data.json 数据
-  fetch('data.json')
-    .then(res => res.json()) // 解析为 JSON
-    .then(data => {
-      // 转换数据格式
-      const transformed = Object.keys(data.api_site).map(key => {
-        const site = data.api_site[key];
-        return {
-          name: site.name,
-          api: site.api,
-          adult: site.is_adult
-        };
-      });
+    // 获取 JSON 文件
+    fetch('data.json')
+        .then(response => response.json())   // 解析 JSON 文件
+        .then(data => {
+            // 生成符合影视仓要求的 dingyue.json 格式
+            let formattedData = data.map(item => {
+                return {
+                    name: item.name,
+                    api: item.api,
+                    adult: item.adult
+                };
+            });
 
-      // 将转换后的数据作为 JSON 输出
-      const jsonData = JSON.stringify(transformed);
-
-      // 将 JSON 设置为页面内容，影视仓访问该页面时直接得到数据
-      document.body.innerText = jsonData;
-    })
-    .catch(err => {
-      // 如果读取或转换失败，输出错误信息
-      console.error('数据加载失败:', err);
-      document.body.innerText = '数据加载失败，请检查系统配置。';
-    });
+            // 显示转换后的 JSON
+            document.getElementById('json-output').textContent = JSON.stringify(formattedData, null, 4);
+        })
+        .catch(error => {
+            console.error('加载 JSON 失败:', error);
+            document.getElementById('json-output').textContent = '加载失败，请稍后再试。';
+        });
 </script>
+
 </body>
 </html>
