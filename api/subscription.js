@@ -12,7 +12,7 @@ export default function handler(req, res) {
     // 转换为影视仓支持的JSON格式
     const subscriptionData = {
       code: 200,
-      msg: "success",
+      msg: "小苹果TV订阅源",
       data: {
         sites: Object.entries(apiSites).map(([key, site]) => ({
           key: key,
@@ -22,7 +22,8 @@ export default function handler(req, res) {
           detail: site.detail || ""
         }))
       },
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      generatedBy: "小苹果TV"
     };
     
     // 设置JSON响应头
