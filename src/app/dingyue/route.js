@@ -1,14 +1,14 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-export async function GET() {
+export default function handler(req, res) {
   try {
     // 读取data.json文件
     const dataPath = join(process.cwd(), 'data.json');
     const jsonData = JSON.parse(readFileSync(dataPath, 'utf8'));
     const apiSites = jsonData.api_site;
 
-    // 转换sites
+    // 完全照抄sites格式
     const sites = Object.values(apiSites).map(site => ({
       key: site.name.replace(/\s+/g, '_'),
       name: site.name,
@@ -17,31 +17,22 @@ export async function GET() {
       searchable: 1,
       quickSearch: 1,
       filterable: 1,
-      changeable: 1,
-      playerType: 2
+      changeable: 1
     }));
 
-    // 紧凑格式 - 不要任何格式化
+    // 完全照抄 - 包括所有字段和格式
     const responseData = {
       sites: sites,
       parses: [{"name":"Json聚合","type":3,"url":"Demo"},{"name":"官方解析","type":0,"url":"https://jx.m3u8.tv/jiexi/?url="}],
-      flags: ["youku","qq","iqiyi","qiyi","letv","sohu","tudou","pptv","mgtv","wasu","bilibili"],
-      name: "小苹果TV",
-      version: "1.0.0"
+      flags: ["youku","qq","iqiyi","qiyi","letv","sohu","tudou","pptv","mgtv","wasu","bilibili"]
     };
     
-    return new Response(JSON.stringify(responseData), {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache-Control': 'no-cache',
-      },
-    });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.send(JSON.stringify(responseData));
     
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({success:false,error:"服务器错误"}), {
-      status: 500,
-      headers: {'Content-Type': 'application/json'},
-    });
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.status(500).send(JSON.stringify({success:false,error:"服务器错误"}));
   }
 }
