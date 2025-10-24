@@ -8,28 +8,31 @@ export async function GET() {
     const jsonData = JSON.parse(readFileSync(dataPath, 'utf8'));
     const apiSites = jsonData.api_site;
 
-    // 按照示例格式转换sites
+    // 按照完整示例格式转换sites
     const sites = Object.values(apiSites).map(site => ({
-      key: site.name.replace(/\s+/g, '_'), // 替换空格为下划线
+      key: site.name.replace(/\s+/g, '_').toLowerCase(), // 小写+下划线
       name: site.name,
-      type: site.is_adult ? 3 : 0, // 按照示例使用 type: 3
-      api: site.api,
-      searchable: 1,
-      quickSearch: 1
+      type: 3,
+      api: site.api
     }));
 
-    // 完全按照示例格式
+    // 完全按照官方示例格式
     const responseData = {
       sites: sites,
       parses: [
         {
-          name: "默认解析",
+          name: "官方解析",
+          type: 1,
           url: ""
         }
+      ],
+      rules: [],
+      flags: [
+        "qq", "youku", "iqiyi", "letv", "sohu", "tudou", "pptv", "mgtv"
       ]
     };
     
-    return new Response(JSON.stringify(responseData), {
+    return new Response(JSON.stringify(responseData, null, 2), {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-cache',
