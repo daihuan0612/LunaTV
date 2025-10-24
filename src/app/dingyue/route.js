@@ -8,28 +8,40 @@ export async function GET() {
     const jsonData = JSON.parse(readFileSync(dataPath, 'utf8'));
     const apiSites = jsonData.api_site;
 
-    // 按照完整示例格式转换sites
+    // 完全按照示例格式转换sites
     const sites = Object.values(apiSites).map(site => ({
-      key: site.name.replace(/\s+/g, '_').toLowerCase(), // 小写+下划线
+      key: site.name.replace(/\s+/g, '_'),
       name: site.name,
-      type: 3,
-      api: site.api
+      type: 1, // 使用type: 1（直连类型）
+      api: site.api,
+      searchable: 1,
+      quickSearch: 1,
+      filterable: 1,
+      changeable: 1,
+      playerType: 2
     }));
 
-    // 完全按照官方示例格式
+    // 完全照抄可用的配置格式
     const responseData = {
       sites: sites,
       parses: [
         {
-          name: "官方解析",
-          type: 1,
-          url: ""
+          name: "Json聚合",
+          type: 3,
+          url: "Demo"
+        },
+        {
+          name: "官方解析", 
+          type: 0,
+          url: "https://jx.m3u8.tv/jiexi/?url="
         }
       ],
-      rules: [],
       flags: [
-        "qq", "youku", "iqiyi", "letv", "sohu", "tudou", "pptv", "mgtv"
-      ]
+        "youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", 
+        "pptv", "mgtv", "wasu", "bilibili"
+      ],
+      name: "小苹果TV",
+      version: "1.0.0"
     };
     
     return new Response(JSON.stringify(responseData, null, 2), {
