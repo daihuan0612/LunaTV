@@ -1,38 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>影视仓数据</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>影视仓订阅数据</title>
 </head>
 <body>
-
-<h2>影视仓数据 - dingyue.json</h2>
-
+<h1>影视仓订阅数据</h1>
 <pre id="json-output">正在加载...</pre>
 
 <script>
-    // 获取 JSON 文件
-    fetch('data.json')
-        .then(response => response.json())   // 解析 JSON 文件
-        .then(data => {
-            // 生成符合影视仓要求的 dingyue.json 格式
-            let formattedData = data.map(item => {
-                return {
-                    name: item.name,
-                    api: item.api,
-                    adult: item.adult
-                };
-            });
+// 定义 JSON 文件路径（与 html 同级）
+const dataFile = './data.json';
 
-            // 显示转换后的 JSON
-            document.getElementById('json-output').textContent = JSON.stringify(formattedData, null, 4);
-        })
-        .catch(error => {
-            console.error('加载 JSON 失败:', error);
-            document.getElementById('json-output').textContent = '加载失败，请稍后再试。';
-        });
+// 封装一个 fetch JSON 函数
+async function loadJSON() {
+    try {
+        const response = await fetch(dataFile);
+        if (!response.ok) throw new Error('HTTP错误: ' + response.status);
+        const data = await response.json();
+
+        // 在页面显示
+        document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+
+        // 如果影视仓直接拉取这个 HTML，需要返回 JSON
+        // 可以通过重写 MIME 类型（部分静态服务器支持）
+        // 也可以直接让影视仓拉取 data.json
+        console.log('JSON 加载成功', data);
+    } catch (err) {
+        document.getElementById('json-output').textContent = '加载失败: ' + err;
+        console.error(err);
+    }
+}
+
+// 执行加载
+loadJSON();
 </script>
-
 </body>
 </html>
