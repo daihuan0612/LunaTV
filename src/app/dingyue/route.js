@@ -8,46 +8,28 @@ export async function GET() {
     const jsonData = JSON.parse(readFileSync(dataPath, 'utf8'));
     const apiSites = jsonData.api_site;
 
-    // 转换为TVBox标准格式
+    // 按照示例格式转换sites
     const sites = Object.values(apiSites).map(site => ({
-      key: site.name,
+      key: site.name.replace(/\s+/g, '_'), // 替换空格为下划线
       name: site.name,
-      type: site.is_adult ? 1 : 0,
+      type: site.is_adult ? 3 : 0, // 按照示例使用 type: 3
       api: site.api,
       searchable: 1,
-      quickSearch: 1,
-      filterable: 1,
-      categories: site.is_adult ? ["成人专区"] : ["电影", "电视剧", "综艺", "动漫"]
+      quickSearch: 1
     }));
 
-    // TVBox标准配置
+    // 完全按照示例格式
     const responseData = {
       sites: sites,
-      lives: [
-        {
-          group: "小苹果TV",
-          channels: [
-            {
-              name: "资源站点", 
-              urls: ["about:blank"]
-            }
-          ]
-        }
-      ],
       parses: [
         {
-          name: "通用解析",
-          type: 0,
+          name: "默认解析",
           url: ""
         }
-      ],
-      flags: [
-        "youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", 
-        "pptv", "mgtv", "wasu"
       ]
     };
     
-    return new Response(JSON.stringify(responseData, null, 2), {
+    return new Response(JSON.stringify(responseData), {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-cache',
