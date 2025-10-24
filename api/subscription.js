@@ -21,9 +21,11 @@ export default function handler(req, res) {
       m3uContent += `${site.api}\n\n`;
     }
     
-    // 设置响应头
-    res.setHeader('Content-Type', 'audio/x-mpegurl; charset=utf-8');
+    // 修正响应头 - 让浏览器和影视仓直接显示内容，不下载
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Content-Disposition', 'inline'); // 关键：内联显示，不下载
+    
     res.send(m3uContent);
     
   } catch (error) {
