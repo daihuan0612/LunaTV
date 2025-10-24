@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>影视源列表</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #121212; color: #f5f5f5; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    pre { background: #1e1e1e; padding: 15px; border-radius: 8px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>影视源数据</h1>
+  <pre id="data-container">正在加载数据...</pre>
+
+  <script>
+    async function loadData() {
+      try {
+        const response = await fetch('/api/data');
+        if (!response.ok) throw new Error('请求失败');
+        const data = await response.json();
+        document.getElementById('data-container').textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('data-container').textContent = '加载数据失败: ' + err;
+        console.error(err);
+      }
+    }
+
+    // 页面加载时先获取一次数据
+    loadData();
+
+    // 每10秒刷新一次
+    setInterval(loadData, 10000);
+  </script>
+</body>
+</html>
