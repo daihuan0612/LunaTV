@@ -9,21 +9,22 @@ export default function handler(req, res) {
     const jsonData = JSON.parse(readFileSync(dataPath, 'utf8'));
     const apiSites = jsonData.api_site;
 
-    // 转换为影视仓支持的JSON格式
+    // 转换为影视仓支持的标准JSON格式
+    const sitesArray = Object.entries(apiSites).map(([key, site]) => ({
+      key: key,
+      name: site.name,
+      api: site.api,
+      type: site.is_adult ? 1 : 0, // 0-普通 1-成人
+      visible: 1,
+      extra: site.detail || ""
+    }));
+
+    // 影视仓标准响应格式
     const subscriptionData = {
-      code: 200,
-      msg: "小苹果TV订阅源",
-      data: {
-        sites: Object.entries(apiSites).map(([key, site]) => ({
-          key: key,
-          name: site.name,
-          api: site.api,
-          is_adult: site.is_adult,
-          detail: site.detail || ""
-        }))
-      },
-      timestamp: Date.now(),
-      generatedBy: "小苹果TV"
+      success: true,
+      data: sitesArray,
+      message: "小苹果TV订阅源",
+      version: "1.0"
     };
     
     // 设置JSON响应头
@@ -35,10 +36,10 @@ export default function handler(req, res) {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({
-      code: 500,
-      msg: "服务器错误",
+      success: false,
       data: null,
-      timestamp: Date.now()
+      message: "服务器错误",
+      version: "1.0"
     });
   }
 }
