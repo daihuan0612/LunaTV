@@ -1,24 +1,25 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const router = express.Router();
+import { readFile } from 'fs/promises';
+import path from 'path';
 
-// 返回 data.json 数据
-router.get('/api/data', (req, res) => {
-  const dataPath = path.join(__dirname, '../../data.json'); // data.json 放在项目根目录
-  fs.readFile(dataPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('读取 data.json 失败:', err);
-      return res.status(500).json({ error: '读取数据失败' });
-    }
-    try {
-      const jsonData = JSON.parse(data);
-      res.json(jsonData);
-    } catch (e) {
-      console.error('解析 JSON 失败:', e);
-      res.status(500).json({ error: 'JSON 解析失败' });
-    }
-  });
-});
-
-module.exports = router;
+export async function GET() {
+  try {
+    // 拼接根目录 data.json 的绝对路径
+    const __dirname = path.resolve(); 
+    const filePath = path.join(__dirname, 'data.json');
+    
+    // 读取文件
+    const data = await readFile(filePath, 'utf-8');
+    
+    // 返回 JSON
+    return new Response(data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
